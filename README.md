@@ -1,2 +1,7 @@
 # minecraft-server-manager
-Web page to manage a Minecraft server hosted in AWS. Using an architecture of microservices using AWS Lambda and AWS APIGateway to manage different status from the EC2 instances hosting the Minecraft runtime.
+Description: Web page to manage a Minecraft server hosted in AWS. Using an architecture of microservices using AWS Lambda and AWS APIGateway to manage different status from the EC2 instances hosting the Minecraft runtime.
+
+# How it works?
+First of all, I installed the minecraft-server.jar on the EC2 using Ubuntu 18.04, adding to bash files: one to start a screen session, run the minecraft server and detach from the session; the other starts the previews batch file. This last file seems redundant but is for a cronotab to run it when the instance is turned on, so that way each time the instances starts running, it will automatically run the minecraft server and have it in a screen session if is necessary acces to the game console.
+
+For a microservices approach, AWS Lambda will execute python code with boto3 to manage the status of the server as start running, stop it and check status. All of these with a role from IAM to grant access to those Lambdas to control and get status from that specific instance. And using AWS APIGateway we expose the lambdas in a REST API which is simple to use in JS for a web page. Configuring correctly the CORS permissions on APIGateway we can use the web page to call the Lambdas and get iformation from the service, making easier to start and stop the server. Also the web page can be hosted in a AWS S3 bucket as a static web page to be accesible from the internet.
